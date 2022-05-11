@@ -1,16 +1,7 @@
 package Domain;
 
-public class Fan {
-
-    private String firstName;
-
-    // constructors / standard setters / getters
-    public Fan(String fName) {
-        firstName = fName;
+public class Fan extends User {
+    public Fan(String name) {
+        super(name);
     }
-
-    public void setName(String fName) {
-        firstName = fName;
-    }
-
-    public String getName () {return firstName;}
+}
