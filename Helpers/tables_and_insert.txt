@@ -1,0 +1,7 @@
+CREATE TABLE users(
+    personID int,
+    username varchar(255),
+    password varchar(255),
+    firstName varchar(255),
+    role varchar(255)
+);
