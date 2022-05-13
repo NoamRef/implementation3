@@ -3,10 +3,12 @@ package Domain;
 public class User {
 
     private String firstName;
+    private String username;
 
     // constructors / standard setters / getters
-    public User(String fName) {
+    public User(String fName, String UserName) {
         firstName = fName;
+        this.username = UserName;
     }
 
     // getter & setters
@@ -14,8 +16,12 @@ public class User {
         firstName = fName;
     }
 
-    public String getName() {
+    public String getFirstName() {
         return this.firstName;
+    }
+
+    public String getUserName() {
+        return this.username;
     }
 
     // functions

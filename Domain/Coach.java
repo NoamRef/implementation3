@@ -3,8 +3,8 @@ package Domain;
 public class Coach extends User {
     private Team team = null;
 
-    public Coach(String name) {
-        super(name);
+    public Coach(String name, String fname) {
+        super(name, fname);
     }
 
     // getter and setters
