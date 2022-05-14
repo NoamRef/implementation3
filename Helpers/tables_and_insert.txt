@@ -7,3 +7,50 @@ CREATE TABLE users(
 );
 
 insert into users(username,password,firstname,role) values("Test","Pass","Name","Fan");
+
+CREATE TABLE leagues(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    leagueName varchar(255)
+);
+
+insert into leagues(leagueName) values("La Liga");
+insert into leagues(leagueName) values("World Cup");
+insert into leagues(leagueName) values("UEFA");
+
+CREATE TABLE Seasons(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    seasonName varchar(255)
+);
+
+insert into Seasons(seasonName) values("2019-2020");
+insert into Seasons(seasonName) values("2020-2021");
+insert into Seasons(seasonName) values("2021-2022");
+insert into Seasons(seasonName) values("2022-2023");
+
+CREATE TABLE Teams(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    TeamName varchar(255),
+    leagueID INTEGER,
+    SeasonID INTEGER,
+    FOREIGN KEY (leagueID) REFERENCES leagues(id),
+    FOREIGN KEY (SeasonID) REFERENCES Seasons(id)
+);
+
+insert into Teams(TeamName,leagueID,SeasonID) values("Real Madrid",1,4);
+
+CREATE TABLE Stadiums(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    StadiumName varchar(255),
+    HomeTeamID INTEGER,
+    FOREIGN KEY (HomeTeamID) REFERENCES Teams(id)
+);
+
+insert into Stadiums(StadiumName,HomeTeamID) values("santiago bernabeu",1);
+
+CREATE TABLE Policy(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    PolicyName varchar(255)
+);
+
+insert into Policy(PolicyName) values("League");
+insert into Policy(PolicyName) values("Cup");

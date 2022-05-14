@@ -8,7 +8,7 @@ import java.util.*;
 // system
 public class UserApplication {
     User LoggedIn = null;
-    String UserRole = "";
+    String UserRole = "Guest";
     UserController uc = new UserController();
 
     public void ResgisterUser(String u1, String p1, String f1, String role) {
@@ -31,7 +31,7 @@ public class UserApplication {
 
     public void LogOut() {
         LoggedIn = null;
-        UserRole = "";
+        UserRole = "Guest";
         System.out.println("Logged out Sucssefully");
     }
 }
