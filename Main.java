@@ -6,8 +6,9 @@ import Domain.UserController;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        // UserController uc = new UserController();
-        // uc.ResgisterUser("Shimon", "123", "Shimi", "Refree");
+        UserApplication up = new UserApplication();
+        up.LoginUser("David", "12345");
+        up.WhosISloggedIN();
         /**
          * UserApplication up = new UserApplication();
          * Scanner scanner = new Scanner(System.in);

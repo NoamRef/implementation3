@@ -1,6 +1,9 @@
 CREATE TABLE users(
-    username varchar(255) PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username varchar(255),
     password varchar(255),
     firstName varchar(255),
     role varchar(255)
 );
+
+insert into users(username,password,firstname,role) values("Test","Pass","Name","Fan");
