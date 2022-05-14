@@ -9,7 +9,7 @@ import java.util.*;
 public class UserApplication {
     UserController uc = new UserController();
 
-    public void ResgisterUser(String uName, String pass, String FirstName) {
-        uc.insertUser(uName, pass, FirstName);
+    public void ResgisterUser(String u1, String p1, String f1, String role) {
+        uc.ResgisterUser(u1, p1, f1, role);
     }
 }
