@@ -2,13 +2,13 @@ package Domain;
 
 public class User {
 
-    private String firstName;
     private String username;
+    private String firstName;
 
     // constructors / standard setters / getters
-    public User(String fName, String UserName) {
-        firstName = fName;
+    public User(String UserName, String fName) {
         this.username = UserName;
+        firstName = fName;
     }
 
     // getter & setters

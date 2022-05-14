@@ -12,15 +12,15 @@ public class UserController {
         ud = SqlDB.getInstance();
     }
 
-    public void ResgisterUser(String u1, String p1, String f1, String role) {
+    public int ResgisterUser(String u1, String p1, String f1, String role) {
         if (ud.checkUserName(u1)) // check details
         {
-            return;
+            return -1; // user exists
         }
         User u = new User(u1, f1);
         if (!role.equals("Fan") && !role.equals("Representative") && !role.equals("Refree")) {
-            System.out.println("Error with role choice");
-            return;
+            System.out.println("Error: role choice unvalid");
+            return -2; // role unvalid
         }
         if (role.equals("Fan")) {
             u = new Fan(u1, f1);
@@ -36,6 +36,11 @@ public class UserController {
         } catch (Exception ex) {
             throw new RuntimeException("Error Adding User", ex);
         }
+        return 1; // sucsses
+    }
+
+    public void DeleteUser(String name) {
+        ud.delete(name);
     }
 
 }

@@ -3,6 +3,7 @@ package DataAccess;
 import Domain.User;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,6 +14,7 @@ public class SqlDB {
 
     private static final SqlDB instance = new SqlDB(); // singelton
     DBConnector dbc = DBConnector.getInstance();
+    Connection connection;
 
     // private constructor to avoid client applications to use constructor
     public static SqlDB getInstance() {
@@ -21,17 +23,17 @@ public class SqlDB {
 
     private SqlDB() {
         dbc = DBConnector.getInstance();
+        connection = DBConnector.getConnection();
     }
 
     public boolean checkUserName(String u1) {
         try {
-            Connection connection = DBConnector.getConnection();
-            String query = "select * from users where username='" + u1 + "'";
+            String query = "select COUNT(*) from users where username='" + u1 + "'";
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            if (rs.getRow() > 0) // not empty => user Exists
+            if (rs.getInt(1) > 0) // not empty => user Exists
             {
-                System.out.println("User Name Exists");
+                System.out.println("Error: User Name Exists");
                 return true; // error
             }
             return false; // good
@@ -44,13 +46,11 @@ public class SqlDB {
     public void Adduser(User user, String password) {
         try {
 
-            Connection connection = DBConnector.getConnection();
             Statement stmt = connection.createStatement();
-            String role = user.getClass().getName();
-            String[] roleParts = role.split(".");
+            String role = user.getClass().getName().replace("Domain.", "");
             String sql = "INSERT INTO users " +
                     "VALUES ('" + user.getUserName() + "','" + password + "','" + user.getFirstName() + "','"
-                    + roleParts[1]
+                    + role
                     + "');";
             System.out.println(sql);
             stmt.executeUpdate(sql);
@@ -64,7 +64,18 @@ public class SqlDB {
 
     }
 
-    public void delete(User user) {
+    public void delete(String name) {
+        String sql = "DELETE FROM users WHERE username = ?";
 
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            // set the corresponding param
+            pstmt.setString(1, name);
+            // execute the delete statement
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
