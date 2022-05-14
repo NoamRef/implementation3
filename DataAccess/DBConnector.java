@@ -5,20 +5,22 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 public class DBConnector {
-    public static final String URL = "jdbc:mysql://localhost:3306/";
+    public static final String URL = "jdbc:sqlite:C:/sqlite3/DB.db"; // change position to your DB on your cp
     public static final String USER = "root";
     public static final String PASS = "root";
 
     private static final DBConnector instance = new DBConnector();
 
-    //private constructor to avoid client applications to use constructor
-    public static DBConnector getInstance(){
+    // private constructor to avoid client applications to use
+    // constructor(Singelton)
+    public static DBConnector getInstance() {
         return instance;
     }
 
     private DBConnector() {
 
     }
+
     /**
      * Get a connection to database
      *
@@ -26,19 +28,16 @@ public class DBConnector {
      */
     public static Connection getConnection() {
         try {
-            //DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-            //return DriverManager.getConnection(URL, USER, PASS);
-            Connection conn =
-                    DriverManager.getConnection("jdbc:mysql://localhost:3306/example","root", "root");
+            Connection conn = DriverManager.getConnection(URL);
+            System.out.println("Connection to SQLite has been established.");
 
             return conn;
-        } catch (SQLException ex) {
-            throw new RuntimeException("Error connecting to the database", ex);
+        } catch (Exception e) {
+            throw new RuntimeException("Error connecting to the database", e);
         }
     }
-     /**
-         * Test Connection
-         */
-
+    /**
+     * Test Connection
+     */
 
 }
