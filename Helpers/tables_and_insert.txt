@@ -62,11 +62,11 @@ insert into Policy(PolicyName) values("League");
 insert into Policy(PolicyName) values("Cup");
 
 CREATE TABLE RefreePlacment(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
     RefreeID INTEGER(255),
     SeasonID INTEGER(255),
     leagueID INTEGER(255),
     FOREIGN KEY (RefreeID) REFERENCES users(id),
     FOREIGN KEY (SeasonID) REFERENCES Seasons(id),
-    FOREIGN KEY (leagueID) REFERENCES leagues(id)
+    FOREIGN KEY (leagueID) REFERENCES leagues(id),
+    PRIMARY KEY(RefreeID,SeasonID,leagueID)
 );
