@@ -7,6 +7,12 @@ CREATE TABLE users(
 );
 
 insert into users(username,password,firstname,role) values("Test","Pass","Name","Fan");
+// Test
+insert into users(username,password,firstname,role) values("Ref1","RefPassword1","RefName1","Refree");
+insert into users(username,password,firstname,role) values("Ref2","RefPassword2","RefName2","Refree");
+insert into users(username,password,firstname,role) values("Ref3","RefPassword3","RefName3","Refree");
+insert into users(username,password,firstname,role) values("Ref4","RefPassword4","RefName4","Refree");
+insert into users(username,password,firstname,role) values("Rep","pass","Amir","Representative");
 
 CREATE TABLE leagues(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -54,3 +60,13 @@ CREATE TABLE Policy(
 
 insert into Policy(PolicyName) values("League");
 insert into Policy(PolicyName) values("Cup");
+
+CREATE TABLE RefreePlacment(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    RefreeID INTEGER(255),
+    SeasonID INTEGER(255),
+    leagueID INTEGER(255),
+    FOREIGN KEY (RefreeID) REFERENCES users(id),
+    FOREIGN KEY (SeasonID) REFERENCES Seasons(id),
+    FOREIGN KEY (leagueID) REFERENCES leagues(id)
+);

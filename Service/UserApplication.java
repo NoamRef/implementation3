@@ -16,10 +16,14 @@ public class UserApplication {
     }
 
     public void LoginUser(String uName, String Pass) {
+        if (!UserRole.equals("Guest")) {
+            System.out.println("You are already loggedIn, logout");
+            return;
+        }
         LoggedIn = uc.LoginUser(uName, Pass);
         if (LoggedIn != null) {
             UserRole = LoggedIn.getClass().getName().replace("Domain.", "");
-            System.out.println("Logged in Sucssefully");
+            System.out.println("Logged in Sucssefully as " + UserRole);
         } else {
             System.out.println("Failed to login");
         }
@@ -33,5 +37,19 @@ public class UserApplication {
         LoggedIn = null;
         UserRole = "Guest";
         System.out.println("Logged out Sucssefully");
+    }
+
+    public int RefreePlacement(String Season, String league, String[] names) {
+        if (!UserRole.equals("Representative")) {
+            System.out.println("You dont have the right privileges");
+            return -9;
+        }
+        int code = uc.RefreePlacement(Season, league, names);
+        if (code == 1) {
+            System.out.println("Refree placment ended sucssefully for league " + league + " and season " + Season);
+        } else {
+            System.out.println("Problem with refree placment");
+        }
+        return code;
     }
 }

@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,21 +78,6 @@ public class SqlDB {
         }
     }
 
-    public void delete(String name) {
-        String sql = "DELETE FROM users WHERE username = ?";
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-
-            // set the corresponding param
-            pstmt.setString(1, name);
-            // execute the delete statement
-            pstmt.executeUpdate();
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     public String[] getUserDetailsByUName(String name) {
         try {
             String query = "select id,firstName,role from users where username='" + name + "'";
@@ -106,6 +92,119 @@ public class SqlDB {
             System.out.println(e.toString());
         }
         return null;
+    }
+
+    public int LeagueIDbyName(String name) {
+        try {
+            String query = "select id from leagues where leagueName='" + name + "'";
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            return (rs.getInt(1));
+        } catch (Exception e) {
+            return -1; // League Name doesnt exists
+        }
+    }
+
+    public int SeasonIDbyName(String name) {
+        try {
+            String query = "select id from Seasons where seasonName='" + name + "'";
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            return (rs.getInt(1));
+        } catch (Exception e) {
+            return -1; // Season Name doesnt exists
+        }
+    }
+
+    // notice its by FIRSTNAME and not USERNAME
+    public int RefreeIDbyName(String name) {
+        try {
+            String query = "select id from users where firstName='" + name + "' and role='Refree'";
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            return (rs.getInt(1));
+        } catch (Exception e) {
+            return -1; // this refree doesnt exists
+        }
+    }
+
+    public boolean CheckIfRefExistInPlacment(int id, int leagueID, int SeasonID) {
+        try {
+            String query = "select COUNT(*) from RefreePlacment where RefreeID=" + Integer.toString(id)
+                    + " and SeasonID=" + Integer.toString(SeasonID) + " and leagueID=" + Integer.toString(leagueID);
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            if (rs.getInt(1) == 0) // not empty => user Exists with this password
+            {
+                return false; // good
+            }
+            return true; // bad ref exits
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return false;
+        }
+    }
+
+    public void EnrollRef(int id, int leagueID, int SeasonID) {
+        try {
+
+            Statement stmt = connection.createStatement();
+            String sql = "insert into RefreePlacment(RefreeID,SeasonID,leagueID) values(" + id + "," + SeasonID + ","
+                    + leagueID + ")";
+            stmt.executeUpdate(sql);
+        } catch (java.sql.SQLException e) {
+            System.out.println(e.toString());
+        }
+
+    }
+
+    /**
+     * db function that used for testing
+     * 
+     * 
+     * 
+     */
+
+    public List<Integer> getRefreeIds() {
+        try {
+            String query = "select id from users where role='Refree'";
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            List<Integer> ids = new ArrayList<Integer>();
+            while (rs.next()) {
+                ids.add(rs.getInt(1));
+            }
+            return (ids);
+        } catch (Exception e) {
+            return null; // No refrees
+        }
+    }
+
+    public void deleteUser(String name) {
+        String sql = "DELETE FROM users WHERE username = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            // set the corresponding param
+            pstmt.setString(1, name);
+            // execute the delete statement
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void CleanRefreePlacment(String name) {
+        String sql = "DELETE FROM RefreePlacment";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            // execute the delete statement
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }
