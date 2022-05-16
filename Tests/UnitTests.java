@@ -23,7 +23,7 @@ public class UnitTests {
     @Test
     @DisplayName("ControllerRegisterTest")
     public void TestUserRegister() {
-        assertEquals(-1, uc.ResgisterUser("Test", "pass", "name", "Fan")); // user already exits
+        assertEquals(0, uc.ResgisterUser("Test", "pass", "name", "Fan")); // user already exits
         assertEquals(-2, uc.ResgisterUser("NewRefrz", "pass", "name", "Refz")); // role unvalid
         uc.DeleteUser("David");
         assertEquals(1, uc.ResgisterUser("David", "12345", "David", "Representative")); // user should be added

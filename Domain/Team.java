@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Team {
     private String Name;
-    private List<Season> seasons;
+    private List<League> legues;
     private Coach coach;
     private List<Player> players;
     private int points;
