@@ -5,13 +5,13 @@ import java.util.List;
 
 public class Team {
     private String Name;
-    private List<Season> seasons;
+    private List<League> leagues;
     private Coach coach;
     private List<Player> players;
     private int points;
 
     public Team(String name) {
-        seasons = new ArrayList<Season>();
+        leagues = new ArrayList<League>();
         players = new ArrayList<Player>();
         Name = name;
         points = 0;
@@ -19,7 +19,7 @@ public class Team {
     }
 
     public Team(String name, Coach c1) {
-        seasons = new ArrayList<Season>();
+        leagues = new ArrayList<League>();
         players = new ArrayList<Player>();
         Name = name;
         points = 0;

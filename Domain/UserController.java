@@ -3,10 +3,18 @@ package Domain;
 
 import DataAccess.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class UserController {
     SqlDB ud;
+    List<Stadium> stadiums = new ArrayList<>();
+    List<Team> teams = new ArrayList<>();
+    List<Season> seasons = new ArrayList<>();
+    List<Policy> policys = new ArrayList<>();
+    List<League> leagues = new ArrayList<>();
+    List<Refree> refrees = new ArrayList<>();
 
     public UserController() {
         ud = SqlDB.getInstance();
@@ -32,7 +40,7 @@ public class UserController {
     }
 
     public void DeleteUser(String name) {
-        ud.delete(name);
+        ud.deleteUser(name);
     }
 
     public User LoginUser(String userName, String password) {
@@ -43,6 +51,34 @@ public class UserController {
         User u = createObjectByName(details[2], userName, details[1]);
         return u;
 
+    }
+
+    public int RefreePlacement(String season, String league, String[] names) {
+        int SeasonID = ud.SeasonIDbyName(season);
+        if (SeasonID == -1) {
+            System.out.println("Season Name doesn't exist");
+            return -1;
+        }
+        int LeagueID = ud.LeagueIDbyName(league);
+        if (LeagueID == -1) {
+            System.out.println("League Name doesn't exist");
+            return -2;
+        }
+        int refID;
+        // will enroll only names that can be enroll, others will abort(Change
+        // Acceptance Testing for this)
+        for (String refFirstName : names) {
+            refID = ud.RefreeIDbyName(refFirstName);
+            if (refID == -1) {
+                System.out.println(refFirstName + " is not a refree or not exits. FAIL to enroll him");
+            } else if (ud.CheckIfRefExistInPlacment(refID, LeagueID, SeasonID)) {
+                System.out.println(refFirstName + " Aleady exists in this season and legue. FAIL to enroll him");
+            } else {
+                ud.EnrollRef(refID, LeagueID, SeasonID);
+                System.out.println(refFirstName + " Was enrolled sucssefully");
+            }
+        }
+        return 1; // sucsses
     }
 
     // private function to create the object we need
