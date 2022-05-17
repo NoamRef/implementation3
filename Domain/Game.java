@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.xml.crypto.Data;
 
+
 public class Game {
     private int score; // positive->home team winnig
     private Date date;
