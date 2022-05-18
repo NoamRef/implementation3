@@ -120,26 +120,27 @@ public class UserController {
         return u;
     }
 
-    public int preparingGamesSchedule(String leagueID, String seasonID, ArrayList<String> teamsIDList, ArrayList<String> GameDates)
+    public int preparingGamesSchedule(String leagueName, String seasonName,String leagueID, String seasonID, ArrayList<String> teamsIDList, ArrayList<String> GameDates)
     {
-        int season = ud.SeasonIDbyName(seasonID);
+        int season = ud.SeasonIDbyName(seasonName);
         if ( season == -1) {
             System.out.println("Season Name doesn't exist");
             return -1;
         }
-        int league = ud.LeagueIDbyName(leagueID);
+        int league = ud.LeagueIDbyName(leagueName);
         if (league == -1) {
             System.out.println("League Name doesn't exist");
             return -2;
         }
 
-        if (ud.CheckTeamNumInLeague(leagueID, seasonID))
+        if (!ud.CheckTeamNumInLeague(leagueID, seasonID))
         {
             System.out.println("Not Enough Teams");
             return -2;
         }
 
         int gameID = 1;
+        ArrayList<String> teamsIDs = ud.getTeamsByLeagueIDandSeasonID(leagueID, seasonID);
         ArrayList<GameSchedule> gamesScheduleDetailsArray = new ArrayList<>();// GameID(LeagueID-SeasonID-RoundID-GameID), homeTeamID, awayTeamID, WeekNumber
         // for (int i = 0; i < teamsIDList.size(); i++) {
         //     int week = 1;
@@ -157,10 +158,10 @@ public class UserController {
         //     }
         // }
 
-        for (int i = 0; i < teamsIDList.size(); i=i+2) {
+        for (int i = 0; i < teamsIDs.size(); i=i+2) {
             String gid = Integer.toString(gameID);
-            String Homeid = teamsIDList.get(i);
-            String Awayid = teamsIDList.get(i+1);
+            String Homeid = teamsIDs.get(i);
+            String Awayid = teamsIDs.get(i+1);
             String WeekNumber = "Quarter-final";
             String date = GameDates.get(0);
             GameSchedule newGame = new GameSchedule(gid,leagueID,seasonID, Homeid, Awayid, WeekNumber, date);
@@ -168,7 +169,7 @@ public class UserController {
             gameID++; 
         }
 
-        for (int i = 0; i < teamsIDList.size()/4;i++) {
+        for (int i = 0; i < teamsIDs.size()/4;i++) {
             String gid = Integer.toString(gameID);
             String Homeid = "";
             String Awayid = "";

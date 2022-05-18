@@ -60,6 +60,7 @@ insert into Teams(TeamName,leagueID,SeasonID) values("Real Sociedad",1,4);
 insert into Teams(TeamName,leagueID,SeasonID) values("Athletic Bilbao",1,4);
 insert into Teams(TeamName,leagueID,SeasonID) values("Villarreal CF",1,4);
 insert into Teams(TeamName,leagueID,SeasonID) values("Valencia CF",1,4);
+insert into Teams(TeamName,leagueID,SeasonID) values("Espanyol",1,4);
 
 CREATE TABLE Stadiums(
     id INTEGER PRIMARY KEY AUTOINCREMENT,

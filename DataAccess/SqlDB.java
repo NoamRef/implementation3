@@ -255,7 +255,7 @@ public class SqlDB {
     public void AddGameToGameSchedule(String gameID,String leagueID, String seasonID, String homeTID, String awayTID, String weekNum, String date) {
         try {
             Statement stmt = connection.createStatement();
-            String sql = "INSERT INTO GameSchedule(gameID, homeTID, awayTID, weekNum, date) " +
+            String sql = "INSERT INTO GameSchedule(gameID, leagueID, SeasonID, homeTID, awayTID, weekNum, gameDate) " +
                     "VALUES ('" + gameID + "','"  + leagueID + "','" + seasonID +"','" + homeTID + "','" + awayTID + "','"
                     + weekNum + "','" + date
                     + "');";
@@ -264,6 +264,24 @@ public class SqlDB {
         } catch (java.sql.SQLException e) {
             System.out.println(e.toString());
         }
+    }
+
+    public ArrayList<String> getTeamsByLeagueIDandSeasonID(String leagueID, String seasonID)
+    {   
+        ArrayList<String> teams = new ArrayList<>();
+        try {
+            String query = "select id, TeamName from Teams where leagueID=='" + leagueID + "' and SeasonID=='"+seasonID +"'" ;
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next())
+            {
+                teams.add(rs.getString("id"));
+                //teams.add(rs.getString("TeamName"));
+            }     
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return teams;
     }
 
 }

@@ -62,12 +62,12 @@ public class UserApplication {
         return code;
     }
 
-    public int preparingGamesSchedule( String leagueID, String SeasonID, ArrayList<String> teamsIDList, ArrayList<String> GameDates) {
-        if (!UserRole.equals("Representative")) {
-            System.out.println("You dont have the right privileges");
-            return -9;
-        }
-        int code = uc.preparingGamesSchedule(leagueID, SeasonID, teamsIDList, GameDates);
+    public int preparingGamesSchedule( String leagueName, String seasonName,String leagueID, String SeasonID, ArrayList<String> teamsIDList, ArrayList<String> GameDates) {
+        // if (!UserRole.equals("Representative")) {
+        //     System.out.println("You dont have the right privileges");
+        //     return -9;
+        // }
+        int code = uc.preparingGamesSchedule(leagueName,seasonName, leagueID, SeasonID, teamsIDList, GameDates);
         if (code == 0) {
             System.out.println("preparing Games Schudule ended sucssefully for league " + leagueID + " and season " + SeasonID);
         } else {
