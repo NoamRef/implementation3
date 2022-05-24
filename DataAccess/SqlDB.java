@@ -165,8 +165,7 @@ public class SqlDB {
                     + " and SeasonID=" + Integer.valueOf(SeasonID);
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            if (rs.getInt(1) < 4) 
-            {
+            if (rs.getInt(1) < 4) {
                 return false; // good
             }
             return true;
@@ -226,7 +225,7 @@ public class SqlDB {
         }
     }
 
-    public void CleanRefreePlacment(String name) {
+    public void CleanRefreePlacment() {
         String sql = "DELETE FROM RefreePlacment";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -241,10 +240,10 @@ public class SqlDB {
     public void createGameSchedule() {
         try {
             Statement stmt = connection.createStatement();
-            String sql = "CREATE TABLE GameSchedule"+
-                "(id INTEGER PRIMARY KEY AUTOINCREMENT,"+
-                "gameID varchar(255), leagueID varchar(255), SeasonID varchar(255),"+
-                " homeTID varchar(255), awayTID varchar(255), weekNum varchar(255),gameDate varchar(255));";
+            String sql = "CREATE TABLE GameSchedule" +
+                    "(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "gameID varchar(255), leagueID varchar(255), SeasonID varchar(255)," +
+                    " homeTID varchar(255), awayTID varchar(255), weekNum varchar(255),gameDate varchar(255));";
             System.out.println(sql);
             stmt.executeUpdate(sql);
         } catch (java.sql.SQLException e) {
@@ -252,11 +251,13 @@ public class SqlDB {
         }
     }
 
-    public void AddGameToGameSchedule(String gameID,String leagueID, String seasonID, String homeTID, String awayTID, String weekNum, String date) {
+    public void AddGameToGameSchedule(String gameID, String leagueID, String seasonID, String homeTID, String awayTID,
+            String weekNum, String date) {
         try {
             Statement stmt = connection.createStatement();
             String sql = "INSERT INTO GameSchedule(gameID, leagueID, SeasonID, homeTID, awayTID, weekNum, gameDate) " +
-                    "VALUES ('" + gameID + "','"  + leagueID + "','" + seasonID +"','" + homeTID + "','" + awayTID + "','"
+                    "VALUES ('" + gameID + "','" + leagueID + "','" + seasonID + "','" + homeTID + "','" + awayTID
+                    + "','"
                     + weekNum + "','" + date
                     + "');";
             System.out.println(sql);
@@ -266,18 +267,17 @@ public class SqlDB {
         }
     }
 
-    public ArrayList<String> getTeamsByLeagueIDandSeasonID(String leagueID, String seasonID)
-    {   
+    public ArrayList<String> getTeamsByLeagueIDandSeasonID(String leagueID, String seasonID) {
         ArrayList<String> teams = new ArrayList<>();
         try {
-            String query = "select id, TeamName from Teams where leagueID=='" + leagueID + "' and SeasonID=='"+seasonID +"'" ;
+            String query = "select id, TeamName from Teams where leagueID=='" + leagueID + "' and SeasonID=='"
+                    + seasonID + "'";
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            while (rs.next())
-            {
+            while (rs.next()) {
                 teams.add(rs.getString("id"));
-                //teams.add(rs.getString("TeamName"));
-            }     
+                // teams.add(rs.getString("TeamName"));
+            }
         } catch (Exception e) {
             System.out.println(e.toString());
         }

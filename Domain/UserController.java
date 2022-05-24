@@ -19,28 +19,6 @@ public class UserController {
     public UserController() {
         ud = SqlDB.getInstance();
     }
-    
-    public int createGameSchedule() {
-        try {
-            ud.createGameSchedule();
-        } catch (Exception ex) {
-            throw new RuntimeException("createGameSchedule failed", ex);
-        }
-        return 1; // sucsses
-    } 
-
-    public int AddTeam(String teamName, int leagueID, int SeasonID) {
-        // if (ud.checkTeamNameExistsInDB(teamName)) // check details
-        // {
-        //     return -1; // user exists
-        // }
-        try {
-            ud.AddTeam(teamName, leagueID, SeasonID);
-        } catch (Exception ex) {
-            throw new RuntimeException("Error Adding User", ex);
-        }
-        return 1; // sucsses
-    }
 
     public int ResgisterUser(String u1, String p1, String f1, String role) {
         if (ud.checkUserNameExistsInDB(u1)) // check details
@@ -61,10 +39,6 @@ public class UserController {
         return 1; // sucsses
     }
 
-    public void DeleteUser(String name) {
-        ud.deleteUser(name);
-    }
-
     public User LoginUser(String userName, String password) {
         if (!ud.checkLogInDetails(userName, password)) {
             return null; // details are unvalid
@@ -73,6 +47,14 @@ public class UserController {
         User u = createObjectByName(details[2], userName, details[1]);
         return u;
 
+    }
+
+    public void DeleteUser(String name) {
+        ud.deleteUser(name);
+    }
+
+    public void DeleteEnrollTable() {
+        ud.CleanRefreePlacment();
     }
 
     public int RefreePlacement(String season, String league, String[] names) {
@@ -120,10 +102,10 @@ public class UserController {
         return u;
     }
 
-    public int preparingGamesSchedule(String leagueName, String seasonName,String leagueID, String seasonID, ArrayList<String> teamsIDList, ArrayList<String> GameDates)
-    {
+    public int preparingGamesSchedule(String leagueName, String seasonName, String leagueID, String seasonID,
+            ArrayList<String> teamsIDList, ArrayList<String> GameDates) {
         int season = ud.SeasonIDbyName(seasonName);
-        if ( season == -1) {
+        if (season == -1) {
             System.out.println("Season Name doesn't exist");
             return -1;
         }
@@ -133,51 +115,52 @@ public class UserController {
             return -2;
         }
 
-        if (!ud.CheckTeamNumInLeague(leagueID, seasonID))
-        {
+        if (!ud.CheckTeamNumInLeague(leagueID, seasonID)) {
             System.out.println("Not Enough Teams");
             return -2;
         }
 
         int gameID = 1;
         ArrayList<String> teamsIDs = ud.getTeamsByLeagueIDandSeasonID(leagueID, seasonID);
-        ArrayList<GameSchedule> gamesScheduleDetailsArray = new ArrayList<>();// GameID(LeagueID-SeasonID-RoundID-GameID), homeTeamID, awayTeamID, WeekNumber
+        ArrayList<GameSchedule> gamesScheduleDetailsArray = new ArrayList<>();// GameID(LeagueID-SeasonID-RoundID-GameID),
+                                                                              // homeTeamID, awayTeamID, WeekNumber
         // for (int i = 0; i < teamsIDList.size(); i++) {
-        //     int week = 1;
-        //     for (int j = 0; j < teamsIDList.size(); j++) {
-        //         if (i==j){continue;}
-        //         String gid = leagueID+seasonID+Integer.valueOf(j+1)+gameID;
-        //         String Homeid = teamsIDList.get(i);
-        //         String Awayid = teamsIDList.get(j);
-        //         String WeekNumber = Integer.toString(week);
-        //         String date = GameDates.get(j);
-        //         GameSchedule newGame = new GameSchedule(gid, Homeid, Awayid, WeekNumber, date);
-        //         gamesScheduleDetailsArray.add(newGame);
-        //         gameID++; 
-        //         week++;        
-        //     }
+        // int week = 1;
+        // for (int j = 0; j < teamsIDList.size(); j++) {
+        // if (i==j){continue;}
+        // String gid = leagueID+seasonID+Integer.valueOf(j+1)+gameID;
+        // String Homeid = teamsIDList.get(i);
+        // String Awayid = teamsIDList.get(j);
+        // String WeekNumber = Integer.toString(week);
+        // String date = GameDates.get(j);
+        // GameSchedule newGame = new GameSchedule(gid, Homeid, Awayid, WeekNumber,
+        // date);
+        // gamesScheduleDetailsArray.add(newGame);
+        // gameID++;
+        // week++;
+        // }
         // }
 
-        for (int i = 0; i < teamsIDs.size(); i=i+2) {
+        for (int i = 0; i < teamsIDs.size(); i = i + 2) {
             String gid = Integer.toString(gameID);
             String Homeid = teamsIDs.get(i);
-            String Awayid = teamsIDs.get(i+1);
+            String Awayid = teamsIDs.get(i + 1);
             String WeekNumber = "Quarter-final";
             String date = GameDates.get(0);
-            GameSchedule newGame = new GameSchedule(gid,leagueID,seasonID, Homeid, Awayid, WeekNumber, date);
+            GameSchedule newGame = new GameSchedule(gid, leagueID, seasonID, Homeid, Awayid, WeekNumber, date);
             gamesScheduleDetailsArray.add(newGame);
-            gameID++; 
+            gameID++;
         }
 
-        for (int i = 0; i < teamsIDs.size()/4;i++) {
+        for (int i = 0; i < teamsIDs.size() / 4; i++) {
             String gid = Integer.toString(gameID);
             String Homeid = "";
             String Awayid = "";
             String WeekNumber = "Semi-final";
             String date = GameDates.get(1);
-            GameSchedule newGame = new GameSchedule(gid,leagueID,seasonID, Homeid, Awayid, WeekNumber, date);
+            GameSchedule newGame = new GameSchedule(gid, leagueID, seasonID, Homeid, Awayid, WeekNumber, date);
             gamesScheduleDetailsArray.add(newGame);
-            gameID++; 
+            gameID++;
         }
 
         String gid = Integer.toString(gameID);
@@ -185,14 +168,36 @@ public class UserController {
         String Awayid = "";
         String WeekNumber = "Final";
         String date = GameDates.get(2);
-        GameSchedule newGame = new GameSchedule(gid,leagueID,seasonID, Homeid, Awayid, WeekNumber, date);
+        GameSchedule newGame = new GameSchedule(gid, leagueID, seasonID, Homeid, Awayid, WeekNumber, date);
         gamesScheduleDetailsArray.add(newGame);
 
         for (GameSchedule gs : gamesScheduleDetailsArray) {
-            ud.AddGameToGameSchedule(gs.GameID, gs.LeagueID, gs.SeasonID,gs.homeTeamID,gs.awayTeamID
-            ,gs.weekNumber ,gs.Date);
+            ud.AddGameToGameSchedule(gs.GameID, gs.LeagueID, gs.SeasonID, gs.homeTeamID, gs.awayTeamID, gs.weekNumber,
+                    gs.Date);
         }
         return 0;
+    }
+
+    public int createGameSchedule() {
+        try {
+            ud.createGameSchedule();
+        } catch (Exception ex) {
+            throw new RuntimeException("createGameSchedule failed", ex);
+        }
+        return 1; // sucsses
+    }
+
+    public int AddTeam(String teamName, int leagueID, int SeasonID) {
+        // if (ud.checkTeamNameExistsInDB(teamName)) // check details
+        // {
+        // return -1; // user exists
+        // }
+        try {
+            ud.AddTeam(teamName, leagueID, SeasonID);
+        } catch (Exception ex) {
+            throw new RuntimeException("Error Adding User", ex);
+        }
+        return 1; // sucsses
     }
 
 }

@@ -11,40 +11,41 @@ public class UserApplication {
     String UserRole = "Guest";
     UserController uc = new UserController();
 
-    public void ResgisterUser(String u1, String p1, String f1, String role) {
-        uc.ResgisterUser(u1, p1, f1, role);
+    public int ResgisterUser(String u1, String p1, String f1, String role) {
+        int code = uc.ResgisterUser(u1, p1, f1, role);
+        return code;
     }
 
-    public void createGameSchedule() {
-        uc.createGameSchedule();
-    }
-
-    public void LoginUser(String uName, String Pass) {
+    public int LoginUser(String uName, String Pass) {
         if (!UserRole.equals("Guest")) {
             System.out.println("You are already loggedIn, logout");
-            return;
+            return -1;
         }
         LoggedIn = uc.LoginUser(uName, Pass);
         if (LoggedIn != null) {
             UserRole = LoggedIn.getClass().getName().replace("Domain.", "");
             System.out.println("Logged in Sucssefully as " + UserRole);
+            return 1;
         } else {
             System.out.println("Failed to login");
+            return 0;
         }
     }
 
-    public void AddTeam(String teamName, int leagueID, int SeasonID) {
-        uc.AddTeam(teamName, leagueID, SeasonID);
-    }
-
+    // for debug
     public void WhosISloggedIN() {
         System.out.println(UserRole);
     }
 
-    public void LogOut() {
+    public int LogOut() {
+        if (LoggedIn == null) {
+            System.out.println("Already logged in");
+            return -1;
+        }
         LoggedIn = null;
         UserRole = "Guest";
         System.out.println("Logged out Sucssefully");
+        return 1;
     }
 
     public int RefreePlacement(String Season, String league, String[] names) {
@@ -75,5 +76,13 @@ public class UserApplication {
             System.out.println("Problem with Game placment");
         }
         return code;
+    }
+
+    public void createGameSchedule() {
+        uc.createGameSchedule();
+    }
+
+    public void AddTeam(String teamName, int leagueID, int SeasonID) {
+        uc.AddTeam(teamName, leagueID, SeasonID);
     }
 }
