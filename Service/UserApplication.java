@@ -18,7 +18,6 @@ public class UserApplication {
     public void createGameSchedule() {
         uc.createGameSchedule();
     }
-    
 
     public void LoginUser(String uName, String Pass) {
         if (!UserRole.equals("Guest")) {
@@ -62,16 +61,18 @@ public class UserApplication {
         return code;
     }
 
-    public int preparingGamesSchedule( String leagueName, String seasonName,String leagueID, String SeasonID, ArrayList<String> teamsIDList, ArrayList<String> GameDates) {
+    public int preparingGamesSchedule(String leagueName, String seasonName, String leagueID, String SeasonID,
+            ArrayList<String> teamsIDList, ArrayList<String> GameDates) {
         if (!UserRole.equals("Representative")) {
             System.out.println("You dont have the right privileges");
             return -9;
         }
-        int code = uc.preparingGamesSchedule(leagueName,seasonName, leagueID, SeasonID, teamsIDList, GameDates);
+        int code = uc.preparingGamesSchedule(leagueName, seasonName, leagueID, SeasonID, teamsIDList, GameDates);
         if (code == 0) {
-            System.out.println("preparing Games Schudule ended sucssefully for league " + leagueID + " and season " + SeasonID);
+            System.out.println(
+                    "preparing Games Schudule ended sucssefully for league " + leagueID + " and season " + SeasonID);
         } else {
-            System.out.println("Problem with refree placment");
+            System.out.println("Problem with Game placment");
         }
         return code;
     }

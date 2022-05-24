@@ -9,7 +9,11 @@ public class Game_assiging_policy extends Policy {
         this.name = name;
     }
 
-    public void Apply() {
+    public Game_assiging_policy() {
+        this.name = name;
+    }
 
+    public String Apply() {
+        return ("Applying " + name);
     }
 }

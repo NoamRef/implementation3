@@ -22,4 +22,12 @@ public class League {
     public void addteam(Team t) {
         teams.add(t);
     }
+
+    public String getTeams() {
+        String s = "";
+        for (Team t : teams) {
+            s = s + t.getName() + "\n";
+        }
+        return s;
+    }
 }

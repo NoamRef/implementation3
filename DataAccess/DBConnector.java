@@ -6,7 +6,7 @@ import java.sql.*;
 
 public class DBConnector {
 
-    public static final String URL = "jdbc:sqlite:C:/Users/HP/Desktop/DB.db"; // change position to your DB on your cp
+    public static final String URL = "jdbc:sqlite:C:/sqlite3/DB.db"; // change position to your DB on your cp
     public static final String USER = "root";
     public static final String PASS = "root";
 

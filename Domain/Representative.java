@@ -4,8 +4,4 @@ public class Representative extends User {
     public Representative(String name, String fname) {
         super(name, fname);
     }
-
-    public void CreateLegue() {
-
-    }
 }

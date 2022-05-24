@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.xml.crypto.Data;
 
-
 public class Game {
     private int score; // positive->home team winnig
     private Date date;
@@ -33,7 +32,19 @@ public class Game {
         this.score = score;
     }
 
+    public int returnScore() {
+        return score;
+    }
+
     public void addEvent(Event e) {
         events.add(e);
+    }
+
+    public String returnEventList() {
+        String s = "";
+        for (Event e : events) {
+            s = s + e.returnDesc() + "\n";
+        }
+        return s;
     }
 }

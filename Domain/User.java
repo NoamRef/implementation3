@@ -12,8 +12,8 @@ public class User {
     }
 
     // getter & setters
-    public void setName(String fName) {
-        firstName = fName;
+    public void setName(String uName) {
+        username = uName;
     }
 
     public String getFirstName() {
@@ -22,15 +22,5 @@ public class User {
 
     public String getUserName() {
         return this.username;
-    }
-
-    // functions
-
-    public void Login() {
-
-    }
-
-    public void LogOut() {
-
     }
 }

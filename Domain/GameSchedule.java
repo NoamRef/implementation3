@@ -9,7 +9,8 @@ public class GameSchedule {
     String weekNumber;
     String Date;
 
-    GameSchedule(String gameID,String leagueID, String seasonID, String homeTID, String awayTID, String weekNum, String date){
+    public GameSchedule(String gameID, String leagueID, String seasonID, String homeTID, String awayTID, String weekNum,
+            String date) {
         this.GameID = gameID;
         this.LeagueID = leagueID;
         this.SeasonID = seasonID;
@@ -19,10 +20,8 @@ public class GameSchedule {
         this.Date = date;
     }
 
-    public GameSchedule getGameDetailsByGid(String gameID)
-    {
-        if (gameID==this.GameID)
-        {
+    public GameSchedule getGameDetailsByGid(String gameID) {
+        if (gameID == this.GameID) {
             GameSchedule gs = this;
             return gs;
         }

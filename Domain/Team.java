@@ -46,4 +46,16 @@ public class Team {
     public void Addplayer(Player p1) {
         this.players.add(p1);
     }
+
+    public String getCoachUName() {
+        return this.coach.getUserName();
+    }
+
+    public String getPlayers() {
+        String s = "";
+        for (Player p : players) {
+            s = s + p.getFirstName() + "\n";
+        }
+        return s;
+    }
 }
