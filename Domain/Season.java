@@ -17,6 +17,10 @@ public class Season {
         return year;
     }
 
+    public Game_assiging_policy getPolicy() {
+        return Game_ass_policy;
+    }
+
     public String toString() {
         return " year: " + this.year + " with Game_assigmenst_Policy: " + Game_ass_policy.getName();
     }

@@ -6,17 +6,6 @@ CREATE TABLE users(
     role varchar(255)
 );
 
-CREATE TABLE GameSchedule(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    gameID varchar(255),
-    leagueID varchar(255),
-    SeasonID varchar(255),
-    homeTID varchar(255),
-    awayTID varchar(255),
-    weekNum varchar(255),
-    gameDate varchar(255)
-);
-//insert into GameSchedule(gameID, leagueID, SeasonID, homeTID, awayTID, weekNum, gameDate) values("1","1","4","1","2","QUARTETR","1/1/2022");
 insert into users(username,password,firstname,role) values("Test","Pass","Name","Fan");
 // Test
 insert into users(username,password,firstname,role) values("Ref1","RefPassword1","RefName1","Refree");
@@ -27,12 +16,14 @@ insert into users(username,password,firstname,role) values("Rep","pass","Amir","
 
 CREATE TABLE leagues(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    leagueName varchar(255)
+    leagueName varchar(255),
+    policyID INTEGER,
+    FOREIGN KEY (policyID) REFERENCES Policy(id)
 );
 
-insert into leagues(leagueName) values("La Liga");
-insert into leagues(leagueName) values("World Cup");
-insert into leagues(leagueName) values("UEFA");
+insert into leagues(leagueName,policyID) values("La Liga",1);
+insert into leagues(leagueName,policyID) values("World Cup",2);
+insert into leagues(leagueName,policyID) values("UEFA",2);
 
 CREATE TABLE Seasons(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -62,6 +53,15 @@ insert into Teams(TeamName,leagueID,SeasonID) values("Villarreal CF",1,4);
 insert into Teams(TeamName,leagueID,SeasonID) values("Valencia CF",1,4);
 insert into Teams(TeamName,leagueID,SeasonID) values("Espanyol",1,4);
 
+insert into Teams(TeamName,leagueID,SeasonID) values("Liverpool",4,4);
+insert into Teams(TeamName,leagueID,SeasonID) values("Real Madrid",4,4);
+insert into Teams(TeamName,leagueID,SeasonID) values("Man. City",4,4);
+insert into Teams(TeamName,leagueID,SeasonID) values("Villareal",4,4);
+insert into Teams(TeamName,leagueID,SeasonID) values("Atletico",4,4);
+insert into Teams(TeamName,leagueID,SeasonID) values("Batern",4,4);
+insert into Teams(TeamName,leagueID,SeasonID) values("Chelsea",4,4);
+insert into Teams(TeamName,leagueID,SeasonID) values("Barcelona",4,4);
+
 CREATE TABLE Stadiums(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     StadiumName varchar(255),
@@ -88,3 +88,17 @@ CREATE TABLE RefreePlacment(
     FOREIGN KEY (leagueID) REFERENCES leagues(id),
     PRIMARY KEY(RefreeID,SeasonID,leagueID)
 );
+
+CREATE TABLE GameSchedule(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    gameID varchar(255),
+    leagueID varchar(255),
+    SeasonID varchar(255),
+    homeTeamID varchar(255),
+    awayTeamID varchar(255),
+    GameType varchar(255),
+    gameDate varchar(255),
+    FOREIGN KEY (SeasonID) REFERENCES Seasons(id),
+    FOREIGN KEY (leagueID) REFERENCES leagues(id)
+);
+insert into GameSchedule(gameID, leagueID, SeasonID, homeTeamID, awayTeamID, GameType, gameDate) values("1","1","4","1","2","TestCup","1/1/2022");

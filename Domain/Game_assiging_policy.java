@@ -1,6 +1,12 @@
 package Domain;
 
 import java.security.Policy;
+import java.util.List;
+import java.sql.Date;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Random;
 
 public class Game_assiging_policy extends Policy {
     String name = "Defualt";
@@ -13,8 +19,9 @@ public class Game_assiging_policy extends Policy {
         this.name = name;
     }
 
-    public String Apply() {
-        return ("Applying " + name);
+    public List<Game> Apply(List<Team> teams) {
+        System.out.println("No applying in Defualt");
+        return null;
     }
 
     public String getName() {

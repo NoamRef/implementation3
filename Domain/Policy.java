@@ -1,7 +1,9 @@
 package Domain;
 
+import java.util.List;
+
 public interface Policy {
-    public void Apply();
+    public List<Game> Apply(List<Team> teams);
 
     public String getName();
 }

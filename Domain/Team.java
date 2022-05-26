@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Team {
+    private int id;
     private String Name;
     private List<League> leagues;
     private Coach coach;
@@ -11,6 +12,15 @@ public class Team {
     private int points;
 
     public Team(String name) {
+        leagues = new ArrayList<League>();
+        players = new ArrayList<Player>();
+        Name = name;
+        points = 0;
+        coach = null;
+    }
+
+    public Team(String name, int id) {
+        this.id = id;
         leagues = new ArrayList<League>();
         players = new ArrayList<Player>();
         Name = name;
@@ -29,6 +39,10 @@ public class Team {
     // getters and setter
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public int getID() {
+        return this.id;
     }
 
     public int getPoints() {

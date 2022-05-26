@@ -58,6 +58,10 @@ public class UserController {
         ud.CleanRefreePlacment();
     }
 
+    public void DeleteGamesTable() {
+        ud.CleanGameSchedule();
+    }
+
     public int RefreePlacement(String season, String league, String[] names) {
         int SeasonID = ud.SeasonIDbyName(season);
         if (SeasonID == -1) {
@@ -94,6 +98,49 @@ public class UserController {
         return 1; // sucsses
     }
 
+    public int preparingGamesSchedule(String leagueName, String seasonName) {
+        int season = ud.SeasonIDbyName(seasonName);
+        if (season == -1) {
+            System.out.println("Season Name doesn't exist");
+            return -1;
+        }
+        int league = ud.LeagueIDbyName(leagueName);
+        if (league == -1) {
+            System.out.println("League Name doesn't exist");
+            return -2;
+        }
+        int PolicyID = ud.LeaguePolicyIDbyName(leagueName);
+        String PolicyName = ud.policyNameByID(PolicyID);
+        if (PolicyName == null) {
+            System.out.println("No policy apeended for this league and season");
+            return -3; // if enter here there is a bug in
+        }
+        // create policy object
+        Game_assiging_policy policy = null;
+        String type = "";
+        if (PolicyName.equals("Cup")) {
+            policy = new Game_assiging_policy_cup();
+            type = "Cup";
+        } else if (PolicyName.equals("League")) {
+            policy = new Game_assiging_policy_league();
+            type = "League";
+
+        }
+        Season seasonObject = new Season(Integer.parseInt(seasonName.substring(0, 4)), policy);
+        League LeagueObject = new League(leagueName, seasonObject);
+        System.out.println("Sucssesfully loded:\n" + LeagueObject);
+
+        List<Team> teams = ud.LoadTeams(league, season);
+        if (teams == null) {
+            return -2; // not enough teams
+        }
+        List<Game> games = seasonObject.getPolicy().Apply(teams); // getting games by policy
+        if (ud.SaveGames(games, league, season, type)) {
+            return 1;
+        }
+        return 0; // problem accured
+    }
+
     // private function to create the object we need
     private User createObjectByName(String objName, String u1, String f1) {
         User u = null;
@@ -109,104 +156,6 @@ public class UserController {
             u = new Player(u1, f1);
         }
         return u;
-    }
-
-    public int preparingGamesSchedule(String leagueName, String seasonName, String leagueID, String seasonID,
-            ArrayList<String> teamsIDList, ArrayList<String> GameDates) {
-        int season = ud.SeasonIDbyName(seasonName);
-        if (season == -1) {
-            System.out.println("Season Name doesn't exist");
-            return -1;
-        }
-        int league = ud.LeagueIDbyName(leagueName);
-        if (league == -1) {
-            System.out.println("League Name doesn't exist");
-            return -2;
-        }
-
-        if (!ud.CheckTeamNumInLeague(leagueID, seasonID)) {
-            System.out.println("Not Enough Teams");
-            return -2;
-        }
-
-        int gameID = 1;
-        ArrayList<String> teamsIDs = ud.getTeamsByLeagueIDandSeasonID(leagueID, seasonID);
-        ArrayList<GameSchedule> gamesScheduleDetailsArray = new ArrayList<>();// GameID(LeagueID-SeasonID-RoundID-GameID),
-                                                                              // homeTeamID, awayTeamID, WeekNumber
-        // for (int i = 0; i < teamsIDList.size(); i++) {
-        // int week = 1;
-        // for (int j = 0; j < teamsIDList.size(); j++) {
-        // if (i==j){continue;}
-        // String gid = leagueID+seasonID+Integer.valueOf(j+1)+gameID;
-        // String Homeid = teamsIDList.get(i);
-        // String Awayid = teamsIDList.get(j);
-        // String WeekNumber = Integer.toString(week);
-        // String date = GameDates.get(j);
-        // GameSchedule newGame = new GameSchedule(gid, Homeid, Awayid, WeekNumber,
-        // date);
-        // gamesScheduleDetailsArray.add(newGame);
-        // gameID++;
-        // week++;
-        // }
-        // }
-
-        for (int i = 0; i < teamsIDs.size(); i = i + 2) {
-            String gid = Integer.toString(gameID);
-            String Homeid = teamsIDs.get(i);
-            String Awayid = teamsIDs.get(i + 1);
-            String WeekNumber = "Quarter-final";
-            String date = GameDates.get(0);
-            GameSchedule newGame = new GameSchedule(gid, leagueID, seasonID, Homeid, Awayid, WeekNumber, date);
-            gamesScheduleDetailsArray.add(newGame);
-            gameID++;
-        }
-
-        for (int i = 0; i < teamsIDs.size() / 4; i++) {
-            String gid = Integer.toString(gameID);
-            String Homeid = "";
-            String Awayid = "";
-            String WeekNumber = "Semi-final";
-            String date = GameDates.get(1);
-            GameSchedule newGame = new GameSchedule(gid, leagueID, seasonID, Homeid, Awayid, WeekNumber, date);
-            gamesScheduleDetailsArray.add(newGame);
-            gameID++;
-        }
-
-        String gid = Integer.toString(gameID);
-        String Homeid = "";
-        String Awayid = "";
-        String WeekNumber = "Final";
-        String date = GameDates.get(2);
-        GameSchedule newGame = new GameSchedule(gid, leagueID, seasonID, Homeid, Awayid, WeekNumber, date);
-        gamesScheduleDetailsArray.add(newGame);
-
-        for (GameSchedule gs : gamesScheduleDetailsArray) {
-            ud.AddGameToGameSchedule(gs.GameID, gs.LeagueID, gs.SeasonID, gs.homeTeamID, gs.awayTeamID, gs.weekNumber,
-                    gs.Date);
-        }
-        return 0;
-    }
-
-    public int createGameSchedule() {
-        try {
-            ud.createGameSchedule();
-        } catch (Exception ex) {
-            throw new RuntimeException("createGameSchedule failed", ex);
-        }
-        return 1; // sucsses
-    }
-
-    public int AddTeam(String teamName, int leagueID, int SeasonID) {
-        // if (ud.checkTeamNameExistsInDB(teamName)) // check details
-        // {
-        // return -1; // user exists
-        // }
-        try {
-            ud.AddTeam(teamName, leagueID, SeasonID);
-        } catch (Exception ex) {
-            throw new RuntimeException("Error Adding User", ex);
-        }
-        return 1; // sucsses
     }
 
 }

@@ -32,11 +32,6 @@ public class UserApplication {
         }
     }
 
-    // for debug
-    public void WhosISloggedIN() {
-        System.out.println(UserRole);
-    }
-
     public int LogOut() {
         if (LoggedIn == null) {
             System.out.println("Already logged in");
@@ -62,27 +57,24 @@ public class UserApplication {
         return code;
     }
 
-    public int preparingGamesSchedule(String leagueName, String seasonName, String leagueID, String SeasonID,
-            ArrayList<String> teamsIDList, ArrayList<String> GameDates) {
+    public int preparingGamesSchedule(String leagueName, String seasonName) {
         if (!UserRole.equals("Representative")) {
             System.out.println("You dont have the right privileges");
             return -9;
         }
-        int code = uc.preparingGamesSchedule(leagueName, seasonName, leagueID, SeasonID, teamsIDList, GameDates);
-        if (code == 0) {
+        int code = uc.preparingGamesSchedule(leagueName, seasonName);
+        if (code == 1) {
             System.out.println(
-                    "preparing Games Schudule ended sucssefully for league " + leagueID + " and season " + SeasonID);
+                    "preparing Games Schudule ended sucssefully for league " + leagueName + " and season "
+                            + seasonName);
         } else {
             System.out.println("Problem with Game placment");
         }
         return code;
     }
 
-    public void createGameSchedule() {
-        uc.createGameSchedule();
-    }
-
-    public void AddTeam(String teamName, int leagueID, int SeasonID) {
-        uc.AddTeam(teamName, leagueID, SeasonID);
+    // for debug
+    public void WhosISloggedIN() {
+        System.out.println(UserRole);
     }
 }

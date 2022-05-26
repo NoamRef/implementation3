@@ -141,7 +141,7 @@ public class Controll_Application_integration_Unit_tests {
         int INVALID_PRIVILEGES = -9;
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<String> teamsIDS = new ArrayList<>();
-        assertEquals(INVALID_PRIVILEGES, ua.preparingGamesSchedule("La Liga", "2012-2013", "1", "7", teamsIDS, dates));
+        assertEquals(INVALID_PRIVILEGES, ua.preparingGamesSchedule("La Liga", "2012-2013"));
     }
 
     @Test
@@ -151,7 +151,7 @@ public class Controll_Application_integration_Unit_tests {
         int INVALID_SEASON = -1;
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<String> teamsIDS = new ArrayList<>();
-        assertEquals(INVALID_SEASON, ua.preparingGamesSchedule("La Liga", "2012-2013", "1", "7", teamsIDS, dates));
+        assertEquals(INVALID_SEASON, ua.preparingGamesSchedule("La Liga", "2012-2013"));
     }
 
     @Test
@@ -162,7 +162,7 @@ public class Controll_Application_integration_Unit_tests {
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<String> teamsIDS = new ArrayList<>();
         assertEquals(INVALID_LEAUGE,
-                ua.preparingGamesSchedule("Champions League", "2019-2020", "3", "1", teamsIDS, dates));
+                ua.preparingGamesSchedule("Champions League", "2019-2020"));
     }
 
     @Test
@@ -172,23 +172,16 @@ public class Controll_Application_integration_Unit_tests {
         int INVALID_TEAMS = -2;
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<String> teamsIDS = new ArrayList<>();
-        assertEquals(INVALID_TEAMS, ua.preparingGamesSchedule("UEFA", "2019-2020", "3", "1", teamsIDS, dates));
+        assertEquals(INVALID_TEAMS, ua.preparingGamesSchedule("UEFA", "2019-2020"));
     }
 
     @Test
     @DisplayName("UserApplication_gameSchedule: VALID DETAILS")
     public void gameSchedule_VALID() {
         ua.LoginUser("Rep", "pass");
-        int Sucsses = 0;
-        ArrayList<String> levels = new ArrayList<>();
-        levels.add("Quarter-Final");
-        levels.add("Semi-Final");
-        levels.add("Final");
-        ArrayList<String> dates = new ArrayList<>();
-        dates.add("01/01/2023 21:00");
-        dates.add("08/01/2023 21:00");
-        dates.add("15/01/2023 21:00");
-        assertEquals(Sucsses, ua.preparingGamesSchedule("La Liga", "2020-2021", "1", "4", levels, dates));
+        int Sucsses = 1;
+        uc.DeleteGamesTable();
+        assertEquals(Sucsses, ua.preparingGamesSchedule("UEFA", "2022-2023"));
     }
 
 }

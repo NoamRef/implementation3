@@ -36,7 +36,7 @@ class unit_Intergraion_Class_tests {
     Game_assiging_policy pol = new Game_assiging_policy();
     Season season = new Season(2020, pol);
     League league = new League("LegueA", season);
-    Game game = new Game(date, time, std, t1, t2, refs);
+    Game game = new Game(1, "time", t1, t2);
     Event event = new Event("Goal 1-0 Home Team", "20:42");
     Event event2 = new Event("Goal 1 -1 Away Team", "22:21");
     Player p1 = new Player("NumberOne", "Lionel");
@@ -86,7 +86,6 @@ class unit_Intergraion_Class_tests {
         assertEquals(2020, season.returnSeason());
     }
 
-    // integration
     @Test
     @DisplayName("League:SetGetTeams")
     public void League_SetGetTeams() {
@@ -103,14 +102,12 @@ class unit_Intergraion_Class_tests {
     }
 
     @Test
-    // integration
     @DisplayName("Game:getScore")
     public void Game_getScore() {
         game.updateScore(-1);
         assertEquals(-1, game.returnScore());
     }
 
-    // integration
     @Test
     @DisplayName("Game:SetGetEvents")
     public void Game_SetGetEvents() {
