@@ -63,6 +63,7 @@ public class UserController {
     }
 
     public int RefreePlacement(String season, String league, String[] names) {
+        int count = 0;
         int SeasonID = ud.SeasonIDbyName(season);
         if (SeasonID == -1) {
             System.out.println("Season Name doesn't exist");
@@ -76,8 +77,8 @@ public class UserController {
         }
         League LeagueObject = new League(league, seasonObject);
         System.out.println("Sucssesfully loded:\n" + LeagueObject);
-        // will enroll only names that can be enroll, others will abort(Change
-        // Acceptance Testing for this)
+        // will enroll only names that can be enroll, others will aborted(Change
+        // Acceptance Testing for this) => added support for this aswll
         List<Refree> refs = ud.refreeLoad();
         Iterator iterator = refs.iterator();
         while (iterator.hasNext()) {
@@ -88,12 +89,16 @@ public class UserController {
                 if (reftoADD.equals(name)) {
                     if (ud.CheckIfRefExistInPlacment(refID, LeagueID, SeasonID)) {
                         System.out.println(name + " Aleady exists in this season and legue. FAIL to enroll him");
+                        count = count + 1;
                     } else {
                         ud.EnrollRef(refID, LeagueID, SeasonID);
                         System.out.println(name + " Was enrolled sucssefully");
                     }
                 }
             }
+        }
+        if (count == names.length) {
+            return -5; // all refrees alrady there
         }
         return 1; // sucsses
     }
@@ -134,7 +139,8 @@ public class UserController {
         if (teams == null) {
             return -2; // not enough teams
         }
-        List<Game> games = seasonObject.getPolicy().Apply(teams); // getting games by policy
+        List<Game> games = seasonObject.getPolicy().Apply(teams, seasonObject.returnSeason()); // getting games by
+                                                                                               // policy
         if (ud.SaveGames(games, league, season, type)) {
             return 1;
         }

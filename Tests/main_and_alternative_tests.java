@@ -20,74 +20,74 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 // ua calls uc that class other class => integration test for every UA function will cover all UC
-public class Controll_Application_integration_Unit_tests {
+public class main_and_alternative_tests {
     UserController uc = new UserController();
     UserApplication ua = new UserApplication();
 
     @Test
-    @DisplayName("UserApplication:RegisterUserExist")
+    @DisplayName("UserApplication_RegisterUser:RegisterUserExist")
     public void UserApplication_RegisterUserExist() {
         assertEquals(-1, ua.ResgisterUser("Test", "pass", "name", "Fan")); // user exists
     }
 
     @Test
-    @DisplayName("UserApplication:RegisterUserRoleUnvalid")
+    @DisplayName("UserApplication_RegisterUser:RegisterUserRoleUnvalid")
     public void UserApplication_RegisterUserRoleUnvalid() {
         assertEquals(-2, ua.ResgisterUser("NewRefrz", "pass", "name", "Refz")); // role unvalid
     }
 
     @Test
-    @DisplayName("UserApplication:RegisterUserSucssed")
+    @DisplayName("UserApplication_RegisterUser:RegisterUserSucssed")
     public void UserApplication_RegisterUserSucssed() {
         uc.DeleteUser("David"); // delete from db
         assertEquals(1, ua.ResgisterUser("David", "12345", "David", "Representative")); // user should be added
     }
 
     @Test
-    @DisplayName("UserController:LoginUserFaild")
+    @DisplayName("UserController_LoginIn:LoginUserFaild")
     public void LoginTestFaild() {
         assertEquals(null, uc.LoginUser("Test", "pass"));
     }
 
-    @DisplayName("UserController:LoginUserSucsses")
+    @DisplayName("UserController_LoginIn:LoginUserSucsses")
     public void LoginTestSucsses() {
         assertFalse(null == uc.LoginUser("Test", "Pass"));
     }
 
     @Test
-    @DisplayName("UserApplication:LoginUserFaild")
+    @DisplayName("UserApplication_LoginIn:LoginUserFaild")
     public void LoginTestFaild2() {
         assertEquals(0, ua.LoginUser("Test", "pass"));
     }
 
     @Test
-    @DisplayName("UserApplication:LoginUserFaild")
+    @DisplayName("UserApplication_LoginIn:LoginUserFaild")
     public void LoginTestSucsses2() {
         assertEquals(1, ua.LoginUser("Test", "Pass"));
     }
 
     @Test
-    @DisplayName("UserApplication:AlreadyLoggedIn")
+    @DisplayName("UserApplication_LogOut:AlreadyLoggedIn")
     public void UserApplication_AlreadyLoggedIn() {
         ua.LoginUser("Test", "Pass");
         assertEquals(-1, ua.LoginUser("Ref1", "RefPassword1"));
     }
 
     @Test
-    @DisplayName("UserApplication:LoggedOutSucssefully")
+    @DisplayName("UserApplication_LogOut:LoggedOutSucssefully")
     public void UserApplication_LoggedOutSucssefully() {
         ua.LoginUser("Test", "Pass");
         assertEquals(1, ua.LogOut());
     }
 
     @Test
-    @DisplayName("UserApplication:LoggedOutFailed")
+    @DisplayName("UserApplication_LogOut:LoggedOutFailed")
     public void UserApplication_LoggedOutFailed() {
         assertEquals(-1, ua.LogOut());
     }
 
     @Test
-    @DisplayName("UserApplication:RefreePlacmentSucsses")
+    @DisplayName("UserApplication_Refrees:RefreePlacmentSucsses")
     public void UserApplication_RefreePlacmentSucsses() {
         ua.LoginUser("Rep", "pass");
         uc.DeleteEnrollTable();
@@ -99,7 +99,7 @@ public class Controll_Application_integration_Unit_tests {
     }
 
     @Test
-    @DisplayName("UserApplication:FailedBySeasonName")
+    @DisplayName("UserApplication_Refrees:FailedBySeasonName")
     public void UserApplication_FailedBySeasonName() {
         ua.LoginUser("Rep", "pass");
         uc.DeleteEnrollTable();
@@ -110,8 +110,22 @@ public class Controll_Application_integration_Unit_tests {
         ua.LogOut();
     }
 
+    // fixed acceptance test
     @Test
-    @DisplayName("UserApplication:FailedByLeagueName")
+    @DisplayName("UserApplication_Refrees:FailedByRefreeAleadyExists")
+    public void UserApplication_FailedByRefreeAleadyExistse() {
+        ua.LoginUser("Rep", "pass");
+        uc.DeleteEnrollTable();
+        String[] names = new String[2];
+        names[0] = "Ref1";
+        names[1] = "Ref2";
+        ua.RefreePlacement("2019-2020", "La Liga", names);
+        assertEquals(-5, ua.RefreePlacement("2019-2020", "La Liga", names));
+        ua.LogOut();
+    }
+
+    @Test
+    @DisplayName("UserApplication_Refrees:FailedByLeagueName")
     public void UserApplication_FailedByLeagueName() {
         ua.LoginUser("Rep", "pass");
         uc.DeleteEnrollTable();
@@ -123,7 +137,7 @@ public class Controll_Application_integration_Unit_tests {
     }
 
     @Test
-    @DisplayName("UserApplication:FailedByUserPrivilges")
+    @DisplayName("UserApplication_Refrees:FailedByUserPrivilges")
     public void UserApplication_FailedByUserPrivilges() {
         ua.LoginUser("Test", "Pass");
         uc.DeleteEnrollTable();
@@ -176,12 +190,20 @@ public class Controll_Application_integration_Unit_tests {
     }
 
     @Test
-    @DisplayName("UserApplication_gameSchedule: VALID DETAILS")
-    public void gameSchedule_VALID() {
+    @DisplayName("UserApplication_gameSchedule: VALID DETAILS assigment for cup")
+    public void gameSchedule_VALID_CUP() {
+        uc.DeleteGamesTable();
         ua.LoginUser("Rep", "pass");
         int Sucsses = 1;
-        uc.DeleteGamesTable();
         assertEquals(Sucsses, ua.preparingGamesSchedule("UEFA", "2022-2023"));
+    }
+
+    @Test
+    @DisplayName("UserApplication_gameSchedule: VALID DETAILS assigment for league")
+    public void gameSchedule_VALID_LEAGUE() {
+        ua.LoginUser("Rep", "pass");
+        int Sucsses = 1;
+        assertEquals(Sucsses, ua.preparingGamesSchedule("La Liga", "2022-2023"));
     }
 
 }

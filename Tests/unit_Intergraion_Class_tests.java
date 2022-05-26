@@ -16,6 +16,7 @@ import Service.UserApplication;
 
 import java.util.Arrays;
 import java.util.List;
+import java.io.Console;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -114,5 +115,52 @@ class unit_Intergraion_Class_tests {
         game.addEvent(event);
         game.addEvent(event2);
         assertEquals("20:42 Goal 1-0 Home Team\n22:21 Goal 1 -1 Away Team\n", game.returnEventList());
+    }
+
+    @Test
+    @DisplayName("Policy:LeaguePolicy")
+    public void Policy_league() {
+        pol = new Game_assiging_policy_league();
+        Team t1 = new Team("A");
+        Team t2 = new Team("B");
+        Team t3 = new Team("C");
+        Team t4 = new Team("D");
+        List<Team> teams = new ArrayList<>();
+        teams.add(t1);
+        teams.add(t2);
+        teams.add(t3);
+        teams.add(t4);
+        List<Game> games = pol.Apply(teams, 2200);
+        assertEquals(12, games.size());
+        for (Game game : games) {
+            assertFalse(game.getAwayTeam().getName() == game.getHomeTeam().getName());
+            assertEquals(true, game.GetDate().contains(String.valueOf(2200)));
+
+        }
+    }
+
+    @Test
+    @DisplayName("Policy:CupPolicy")
+    public void Cup_league() {
+        pol = new Game_assiging_policy_cup();
+        Team t1 = new Team("A");
+        Team t2 = new Team("B");
+        Team t3 = new Team("C");
+        Team t4 = new Team("D");
+        List<Team> teams = new ArrayList<>();
+        teams.add(t1);
+        teams.add(t2);
+        teams.add(t3);
+        teams.add(t4);
+        List<Game> games = pol.Apply(teams, 2100);
+        assertEquals(3, games.size());
+        for (Game game : games) {
+            if (game.getAwayTeam() != null) {
+                assertFalse(game.getAwayTeam().getName() == game.getHomeTeam().getName());
+                assertEquals(true, game.GetDate().contains(String.valueOf(2100)));
+            } else {
+                assertEquals(null, game.getHomeTeam());
+            }
+        }
     }
 }

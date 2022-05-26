@@ -19,7 +19,7 @@ public class Game_assiging_policy extends Policy {
         this.name = name;
     }
 
-    public List<Game> Apply(List<Team> teams) {
+    public List<Game> Apply(List<Team> teams, int year) {
         System.out.println("No applying in Defualt");
         return null;
     }

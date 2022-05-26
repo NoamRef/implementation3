@@ -15,13 +15,14 @@ public class Game_assiging_policy_cup extends Game_assiging_policy {
     }
 
     @Override
-    public List<Game> Apply(List<Team> teams) {
+    public List<Game> Apply(List<Team> teams, int year) {
         List<Game> games = new ArrayList<>();
         Random rand = new Random();
         int id = 1;
         int size = teams.size();
         int day = 1;
         boolean firstRun = true;
+        String String_year = String.valueOf(year);
         // rendom, 1v1's
         while (size > 1) {
             for (int i = 0; i < size / 2; i++) {
@@ -36,7 +37,7 @@ public class Game_assiging_policy_cup extends Game_assiging_policy {
                     teams.remove(randomIndex);
                 }
                 // set a date and add to game
-                games.add(new Game(id, "2022-1-" + day + " 21:00", HomeTeam, AwayTeam));
+                games.add(new Game(id, String_year + "-" + String.valueOf(day) + "-9 21:00", HomeTeam, AwayTeam));
                 id += 1;
             }
             firstRun = false;
