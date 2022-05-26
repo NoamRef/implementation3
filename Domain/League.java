@@ -30,4 +30,8 @@ public class League {
         }
         return s;
     }
+
+    public String toString() {
+        return " League " + this.name + " for season:\n" + season;
+    }
 }

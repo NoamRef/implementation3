@@ -4,6 +4,7 @@ package Domain;
 import DataAccess.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -63,23 +64,31 @@ public class UserController {
             System.out.println("Season Name doesn't exist");
             return -1;
         }
+        Season seasonObject = new Season(Integer.parseInt(season.substring(0, 4)));
         int LeagueID = ud.LeagueIDbyName(league);
         if (LeagueID == -1) {
             System.out.println("League Name doesn't exist");
             return -2;
         }
-        int refID;
+        League LeagueObject = new League(league, seasonObject);
+        System.out.println("Sucssesfully loded:\n" + LeagueObject);
         // will enroll only names that can be enroll, others will abort(Change
         // Acceptance Testing for this)
-        for (String refFirstName : names) {
-            refID = ud.RefreeIDbyName(refFirstName);
-            if (refID == -1) {
-                System.out.println(refFirstName + " is not a refree or not exits. FAIL to enroll him");
-            } else if (ud.CheckIfRefExistInPlacment(refID, LeagueID, SeasonID)) {
-                System.out.println(refFirstName + " Aleady exists in this season and legue. FAIL to enroll him");
-            } else {
-                ud.EnrollRef(refID, LeagueID, SeasonID);
-                System.out.println(refFirstName + " Was enrolled sucssefully");
+        List<Refree> refs = ud.refreeLoad();
+        Iterator iterator = refs.iterator();
+        while (iterator.hasNext()) {
+            Refree curr = (Refree) iterator.next();
+            String name = curr.getUserName();
+            int refID = curr.getID();
+            for (String reftoADD : names) {
+                if (reftoADD.equals(name)) {
+                    if (ud.CheckIfRefExistInPlacment(refID, LeagueID, SeasonID)) {
+                        System.out.println(name + " Aleady exists in this season and legue. FAIL to enroll him");
+                    } else {
+                        ud.EnrollRef(refID, LeagueID, SeasonID);
+                        System.out.println(name + " Was enrolled sucssefully");
+                    }
+                }
             }
         }
         return 1; // sucsses

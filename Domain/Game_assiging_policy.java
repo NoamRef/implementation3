@@ -16,4 +16,8 @@ public class Game_assiging_policy extends Policy {
     public String Apply() {
         return ("Applying " + name);
     }
+
+    public String getName() {
+        return name;
+    }
 }

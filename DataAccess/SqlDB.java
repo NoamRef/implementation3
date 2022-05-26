@@ -1,5 +1,6 @@
 package DataAccess;
 
+import Domain.Refree;
 import Domain.User;
 
 import java.sql.Connection;
@@ -61,6 +62,51 @@ public class SqlDB {
 
     }
 
+    // refree details
+    public List<Refree> refreeLoad() {
+        List<Refree> refs = null;
+        try {
+            refs = new ArrayList<>();
+            String username, firstname;
+            int id;
+            Statement stmt = connection.createStatement();
+            String sqlQuery = "select id,username,firstname from users where role='Refree'";
+            ResultSet rs = stmt.executeQuery(sqlQuery);
+            while (rs.next()) {
+                id = rs.getInt(1);
+                username = rs.getString(2);
+                firstname = rs.getString(3);
+                refs.add(new Refree(username, firstname, id));
+            }
+        } catch (java.sql.SQLException e) {
+            System.out.println(e.toString());
+        }
+        return refs;
+    }
+
+    // season details
+    public int SeasonIDbyName(String name) {
+        try {
+            String query = "select id from Seasons where seasonName='" + name + "'";
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            return (rs.getInt(1));
+        } catch (Exception e) {
+            return -1; // Season Name doesnt exists
+        }
+    }
+
+    public int LeagueIDbyName(String name) {
+        try {
+            String query = "select id from leagues where leagueName='" + name + "'";
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            return (rs.getInt(1));
+        } catch (Exception e) {
+            return -1; // League Name doesnt exists
+        }
+    }
+
     public void AddTeam(String teamName, int leagueID, int seasonID) {
         try {
 
@@ -106,40 +152,6 @@ public class SqlDB {
             System.out.println(e.toString());
         }
         return null;
-    }
-
-    public int LeagueIDbyName(String name) {
-        try {
-            String query = "select id from leagues where leagueName='" + name + "'";
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-            return (rs.getInt(1));
-        } catch (Exception e) {
-            return -1; // League Name doesnt exists
-        }
-    }
-
-    public int SeasonIDbyName(String name) {
-        try {
-            String query = "select id from Seasons where seasonName='" + name + "'";
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-            return (rs.getInt(1));
-        } catch (Exception e) {
-            return -1; // Season Name doesnt exists
-        }
-    }
-
-    // notice its by FIRSTNAME and not USERNAME
-    public int RefreeIDbyName(String name) {
-        try {
-            String query = "select id from users where firstName='" + name + "' and role='Refree'";
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-            return (rs.getInt(1));
-        } catch (Exception e) {
-            return -1; // this refree doesnt exists
-        }
     }
 
     public boolean CheckIfRefExistInPlacment(int id, int leagueID, int SeasonID) {
